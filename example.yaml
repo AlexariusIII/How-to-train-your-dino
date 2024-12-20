@@ -1,0 +1,11 @@
+# this corresponds to the default config
+# Remember to change the path to root and extra, unless they are actually at /data/root and /data/extra
+# I have tested this configuration with a 16GB GPU
+train:
+  dataset_path: ImageNet:split=TRAIN:root="root_path":extra="extra_path"
+  batch_size_per_gpu: 128
+  saveckp_freq: 2
+student:
+  block_chunks: 4
+optim:
+  epochs: 10
