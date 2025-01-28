@@ -7,6 +7,7 @@ How to setup dinoV2 for pretraining of cutsom data
 - git clone https://github.com/facebookresearch/dinov2 
 ### Create Environment and Install dependencies
 - conda create --name dino2 python=3.10
+- conda env create --file env.yml
 - conda activate dino2
 - pip install -U -r dinov2/requirements.txt
 - pip install -e dinov2/
@@ -25,21 +26,20 @@ Next we need to reformat our data, since dinov2 expect data to be in the imageNe
     ...
     - data/root/test/classID/classID_image5.JPEG
     ...
-    - python reformat_data.py
-The original dinov2 paper uses imageNet and requires the labels for the different classes for further downstram tasks. Since we want to pretrain on a custom dataset without labels we are using a single mock label
-    - python reformat_data.py
+The original dinov2 paper uses imageNet and requires the labels for the different classes for further downstram tasks. Since we want to pretrain on a custom dataset without labels we are using a single mock label (n77)
+    - python reformat_data.py --data_dir example_images --target_dir data --class_id n77 --class_name cat
 ### Add extra files
 Dinov2 requires some extra files for your dataset. Create them using:
-    - python get_extra.py --root /data/root --extra /data/extra
+    - python get_extra.py --root data/root --extra data/extra
 
 ## Dinov2 Code adjustments
 ### Add custom split numbers to dinov2 imageNet class
 Count the number of images in each split:
-    - python count_images.py --train_folder /data/root/train --val_folder /data/root/val
+    - python count_images.py --train_folder data/root/train --val_folder data/root/val
 Adjust dinov2/dinov2/data/datasets/image_net.py with your numbers. 
 ### Modify config by adding your data paths and move to config folder
-cp example.yaml dinov2/dinov2/configs/example.yml
-###  Add line in train script to remove slurm dependency
+    - cp example.yaml dinov2/dinov2/configs/example.yml
+###  Add line in train script to remove slurm dependency if applicable
 in dinov2/dinov2/train/train.py you need to add an additional argument:
     - parser.add_argument("--local-rank", default=0, type=int, help="Variable for distributed computing.")
 Alternatively just copy the given train.py and replace the old one:
@@ -48,4 +48,10 @@ Alternatively just copy the given train.py and replace the old one:
 ## Start training
 To start the training on 2 full gpus (recommended):
     cd dinov2
-    - torchrun --nproc_per_node=2 dinov2/train/train.py --config-file=dinov2/configs/example.yaml --output-dir=outputs/
+    - torchrun --nproc_per_node=2 dinov2/train/train.py --config-file=dinov2/configs/example.yml --output-dir=outputs/
+
+## Inference
+/home/jovyan/dinov2-pretraining/How-to-train-your-dino/data/extra/entries-TRAIN.npy
+/home/jovyan/dinov2-pretraining/How-to-train-your-dino/data/extra"/entries-TRAIN.npy
+
+/home/jovyan/dinov2-pretraining/How-to-train-your-dino/data/root/train/n77/n77_958.JPEG
