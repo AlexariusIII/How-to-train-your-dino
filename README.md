@@ -51,7 +51,4 @@ To start the training on 2 full gpus (recommended):
     - torchrun --nproc_per_node=2 dinov2/train/train.py --config-file=dinov2/configs/example.yml --output-dir=outputs/
 
 ## Inference
-/home/jovyan/dinov2-pretraining/How-to-train-your-dino/data/extra/entries-TRAIN.npy
-/home/jovyan/dinov2-pretraining/How-to-train-your-dino/data/extra"/entries-TRAIN.npy
-
-/home/jovyan/dinov2-pretraining/How-to-train-your-dino/data/root/train/n77/n77_958.JPEG
+TODO
